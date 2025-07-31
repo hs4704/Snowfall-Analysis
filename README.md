@@ -1,24 +1,109 @@
-Overview:
-	The purpose of this analysis is to use a time-series model to study the seasonal snowfall patterns in Ann Arbor, Michigan, and predict future snowfall trends. Creating a forecast for these trends helps the government prepare resources to combat snow-related accidents and also save resource money more effectively for other tasks. Additionally, snowfall trends could offer a broader way of viewing the effects of climate change and its impacts on weather patterns across the world, hopefully guiding government policy and planning. 
+# ❄ Snowfall Forecasting in Ann Arbor, Michigan
 
-Dataset Overview: 
-The dataset used for this analysis consisted of daily weather records from January 2013 to December 2023. The data included Date, Precipitation, Snowfall (mm), Snow Depth (mm), Maximum Temperature (℉) and Minimum Temperature (℉). This Data was sourced from the National Centers For Environmental Information (NOAA) via local weather stations1. The attributes used for the purpose of this project were Snowfall and Date.  With the initial dataset, there were 88,770 observations, many having missing values or duplicate dates which was an initial challenge when trying to interpret the data. 
+Time series analysis of seasonal snowfall patterns using ARIMA modeling to aid resource planning and evaluate climate trends.
 
-Data Preprocessing:
-	The first step of analyzing this dataset involved cleaning the data and manipulating it to retain only the information needed for this project. To do this, Snow and Date columns were extracted, and missing values were handled by setting the values equal to zero for snowfall. Setting the missing values to zero was done under the assumption that no entry indicated no occurrence of snow. The last step of data preprocessing was aggregating the dataset to compute the total snowfall for each month across different years. This aggregation greatly reduces the number of attributes and changes the scale to monthly instead of daily which helps in reducing noise and understanding the yearly trends more clearly by creating a more stable dataset. To check that the dataset was cleaned and structured accurately, A visualization of the Snowfall trends was created (Figure 1). After cleaning and aggregating the data, a time-series conversion was made to the data so it could be analyzed using a time-series regression model. To show this conversion worked, a box plot visualization was made to show the variation of snowfall each month with all the years combined (Figure 2).
- 
+---
+## 📌 Overview
 
-<img width="425" alt="Screenshot 2024-08-01 at 7 55 17 PM" src="https://github.com/user-attachments/assets/52a0449a-4ff3-4c61-8ba6-eb186b525660">
-<img width="403" alt="Screenshot 2024-08-01 at 7 56 49 PM" src="https://github.com/user-attachments/assets/0bdfaa45-862c-4a5a-94bc-0426a4a6cbb2">
+This project analyzes seasonal snowfall trends in **Ann Arbor, Michigan** using a time series forecasting model. By modeling and forecasting future snowfall patterns, local governments can:
 
-Algorithm Selection:
-	Because the purpose of using this data is to predict future forecasts,  a regression model is best. Regression algorithms are predictive and use continuous variables from historical data to predict the future. Initially, a linear regression model was considered due to the predictive components of this project, however, through previous research, it was decided the ARIMA model function using the forecast package in R is the most accurate model for predicting weather2. The ARIMA(Autoregressive Integrated Moving Average) model is suitable for time series data with trends and seasonality, which matches the characteristics of the total snowfall data given. This model was configured in R using the ‘auto.arima()’ function, which identifies parameters based on the data’s seasonality and trends3.
-Analysis Results: 
-	To check the performance of the ARIMA model, residual plots and Ljung-Box test were performed. Ljung-Box test is a way to test for the absence of serial autocorrelation, up to a specified lag k 5. The plots suggested that the residuals were random with a p-value of 0.087(Figure  3), which suggests a good fit for the model4. The Mean Absolute Error (MAE) was 1.593, which with the high variability of data, is considered a low error rate. When compared to a linear regression model, the MAE was 16.52963 showing that ARIMA was the better model to predict weather forecasting.  Using the predicted values from the ARIMA regression model, a plot was made showing the predictions for the next 10 years with the trendline given(Figure 4), which was computed from the regression model. The plot also shows a declining trend line, predicting that the total snowfall is getting lower each year. 
+- Better allocate snow-removal resources
+- Minimize weather-related accidents
+- Save costs through efficient planning
+- Analyze climate change effects on seasonal snowfall
 
-<img width="720" alt="Screenshot 2024-08-01 at 7 58 30 PM" src="https://github.com/user-attachments/assets/9542fce1-b8a8-4392-8ffc-d7d0a26f4e7e">
+---
 
 
+## 📁 Dataset Overview
 
-Conclusion: 
-	Overall, the analysis of historical weather data has shown a decline in total snowfall over the years and continues to decline over the next 10 years. The ARIMA model is widely used in various fields, including economics, finance, and meteorology. This model is the best suited for capturing patterns in time series data including seasonality and trends. Although the ARIMA model is the best with time-series data, there are some weaknesses to this approach. Firstly, The ARIMA models assume a linear relationship between historical and future forecasts, which is not always true in real life. Secondly, the model is only suitable for forecasting weather a few years ahead, and the accuracy diminishes when making more long-term forecasts. Given the results from this model, the city government in Ann Arbor Michigan can prepare snow removal accordingly and also plan to halt construction around the months with the most snow. More research could be done to analyze why the trend of snowfall is decreasing, whether it is due to global warming or if there are other trends shown with temperature or precipitation. 
+- **Source:** National Centers for Environmental Information (NOAA)
+- **Duration:** January 2013 – December 2023
+- **Attributes Used:**
+  - `Date`
+  - `Snowfall (mm)`
+- **Original Rows:** ~88,770 observations
+
+The raw data also included precipitation, snow depth, and temperature readings. However, for this project, only `Snowfall` and `Date` were used.
+
+---
+## 🧹 Data Preprocessing
+
+Key steps included:
+
+1. **Column Selection:** Kept only `Date` and `Snowfall`
+2. **Missing Values:** Replaced null snowfall values with `0` (assumed no snowfall)
+3. **Duplicate Dates:** Removed or aggregated duplicates
+4. **Monthly Aggregation:** Aggregated daily snowfall totals to monthly totals to:
+   - Reduce noise
+   - Improve trend visibility
+5. **Time-Series Conversion:** Transformed the dataset into time series format for ARIMA modeling
+
+### 📊 Sample Visualizations
+
+<p float="left">
+  <img src="https://github.com/user-attachments/assets/52a0449a-4ff3-4c61-8ba6-eb186b525660" width="420" />
+  <img src="https://github.com/user-attachments/assets/0bdfaa45-862c-4a5a-94bc-0426a4a6cbb2" width="400" />
+</p>
+
+---
+
+## 🤖 Model Selection: ARIMA
+
+For accurate forecasting, the **ARIMA** (AutoRegressive Integrated Moving Average) model was chosen due to:
+
+- Its strength in modeling seasonal trends
+- Proven accuracy in weather-related forecasting
+
+The model was implemented in **R** using the `auto.arima()` function from the **forecast** package, which automatically optimizes parameters based on trends and seasonality.
+
+### ⚖️ Model Comparison
+
+| Model               | MAE (Mean Absolute Error) |
+|--------------------|---------------------------|
+| ARIMA              | 1.593                     |
+| Linear Regression  | 16.53                     |
+
+> ✅ **ARIMA outperformed Linear Regression** significantly in predictive accuracy.
+
+---
+
+## 📈 Results & Forecast
+
+The ARIMA model was validated using:
+
+- **Ljung-Box Test** (p-value = 0.087) → residuals are uncorrelated  
+- **Residual Analysis** → model fits well
+
+The final 10-year snowfall forecast shows a **declining trend**, indicating potentially reduced snowfall in future winters.
+
+![Forecast Plot](https://github.com/user-attachments/assets/9542fce1-b8a8-4392-8ffc-d7d0a26f4e7e)
+
+---
+
+## ✅ Conclusion
+
+- ❄️ **Snowfall is projected to decrease** in Ann Arbor over the next decade.
+- 📊 The **ARIMA model** proved to be highly effective for short-to-medium range weather forecasts.
+- 🏛️ City planners can **optimize snow removal resources** and **adjust infrastructure projects** based on forecasted snowfall peaks.
+
+---
+
+## ⚠️ Limitations & Future Work
+
+- ARIMA assumes **linear relationships**, which may oversimplify real-world weather phenomena.
+- Long-term forecasts become less reliable.
+- Further studies could incorporate:
+  - Temperature & precipitation trends
+  - Climate change correlations
+  - Advanced machine learning models (e.g., LSTM, Prophet)
+
+---
+
+## 🧰 Tools & Technologies
+
+- **Language:** R
+- **Libraries:** forecast, ggplot2
+- **Model:** ARIMA (`auto.arima()`)
+
+---
